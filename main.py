@@ -24,18 +24,31 @@ def render_markdown(path, md_root):
 
 
 def render_dir(directory, md_root):
-    children = os.listdir(directory)
+    subdirs, pages = list_children_ordered(directory)
     current_path = directory.replace(md_root, "/")
     if not current_path.endswith("/"):
         current_path = current_path + "/"
     if current_path == "/":
-        return render_template("toc.html", current_path=current_path, children=children)
+        return render_template("toc.html", current_path=current_path, subdirs=subdirs, pages=pages)
     else:
         path = Path(directory.replace(md_root, "/"))
         up = str(path.parent)
         if not up.endswith("/"):
             up = up + "/"
-        return render_template("toc.html", current_path=current_path, children=children, up=up)
+        return render_template("toc.html", current_path=current_path, subdirs=subdirs, pages=pages, up=up)
+
+
+def list_children_ordered(parent):
+    children = os.listdir(parent)
+    children.sort()
+    dirs = []
+    files = []
+    for child in children:
+        if os.path.isdir(os.path.join(parent, child)):
+            dirs.append(child)
+        else:
+            files.append(child)
+    return dirs, files
 
 
 def render_file(md_file):

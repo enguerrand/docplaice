@@ -11,9 +11,15 @@
       {% if up is defined %}
         <p><a href="{{ up }}">Up</a></p>
       {% endif %}
-      <p>The following contents are available:</p>
+      <p>Subsections:</p>
       <ul>
-          {% for child in children %}
+          {% for child in subdirs %}
+          <li><a href="{{ current_path }}{{ child }}">{{ child }}</a></li>
+          {% endfor %}
+      </ul>
+      <p>Pages:</p>
+      <ul>
+          {% for child in pages %}
           <li><a href="{{ current_path }}{{ child }}">{{ child }}</a></li>
           {% endfor %}
       </ul>
