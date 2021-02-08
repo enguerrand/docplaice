@@ -14,9 +14,6 @@
               <a href="{{ tokens|join("") }}">{{ token }}/</a>
           {% endfor %}
       </h1>
-      {% if up is defined %}
-        <p><a href="{{ up }}">Up</a></p>
-      {% endif %}
       <p>Subsections:</p>
       <ul>
           {% for child in subdirs %}

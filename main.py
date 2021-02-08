@@ -3,7 +3,6 @@ import re
 
 import markdown
 from flask import Flask, render_template, abort, send_from_directory
-from pathlib import Path
 
 import config
 
@@ -35,22 +34,14 @@ def render_dir(directory, md_root):
 
     current_path = current_path + "/"
 
-    key_word_args = {
-        "current_path": current_path,
-        "current_path_tokens": current_path_tokens,
-        "subdirs": subdirs,
-        "pages": pages,
-        "theme": config.theme,
-    }
-    if current_path == "/":
-        return render_template("toc.html", **key_word_args)
-    else:
-        path = Path(directory.replace(md_root, "/"))
-        up = str(path.parent)
-        if not up.endswith("/"):
-            up = up + "/"
-        key_word_args["up"] = up
-        return render_template("toc.html", **key_word_args)
+    return render_template(
+        "toc.html",
+        current_path=current_path,
+        current_path_tokens=current_path_tokens,
+        subdirs=subdirs,
+        pages=pages,
+        theme=config.theme,
+    )
 
 
 def list_children_ordered(parent):
