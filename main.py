@@ -1,7 +1,7 @@
 import os
 
 import markdown
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, send_from_directory
 from pathlib import Path
 
 import config
@@ -46,6 +46,11 @@ def render_file(md_file):
         return None
     html = markdown.markdown(md, extensions=['extra'])
     return render_template("page.html", title="edrwiki", rendered_markdown=html)
+
+
+@app.route('/css/<path:path>')
+def send_js(path):
+    return send_from_directory('css', path)
 
 
 @app.route('/', defaults={'path': ''})
