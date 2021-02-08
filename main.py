@@ -29,13 +29,15 @@ def render_dir(directory, md_root):
     if not current_path.endswith("/"):
         current_path = current_path + "/"
     if current_path == "/":
-        return render_template("toc.html", current_path=current_path, subdirs=subdirs, pages=pages)
+        return render_template("toc.html", current_path=current_path, subdirs=subdirs, pages=pages, theme=config.theme)
     else:
         path = Path(directory.replace(md_root, "/"))
         up = str(path.parent)
         if not up.endswith("/"):
             up = up + "/"
-        return render_template("toc.html", current_path=current_path, subdirs=subdirs, pages=pages, up=up)
+        return render_template(
+            "toc.html", current_path=current_path, subdirs=subdirs, pages=pages, up=up, theme=config.theme
+        )
 
 
 def list_children_ordered(parent):
@@ -58,7 +60,7 @@ def render_file(md_file):
     except:
         return None
     html = markdown.markdown(md, extensions=["extra"])
-    return render_template("page.html", title="edrwiki", rendered_markdown=html)
+    return render_template("page.html", title="edrwiki", rendered_markdown=html, theme=config.theme)
 
 
 @app.route("/css/<path:path>")
