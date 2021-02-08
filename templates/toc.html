@@ -7,7 +7,13 @@
 </head>
 <body>
   <div id="content">
-      <h1>{{ current_path }}</h1>
+      <h1>
+          {% set tokens = [] %}
+          {% for token in current_path_tokens %}
+              {% if tokens.append(token ~ "/") %} {% endif %}
+              <a class="breadcrumb" href="{{ tokens|join("") }}">{{ token }}/</a>
+          {% endfor %}
+      </h1>
       {% if up is defined %}
         <p><a href="{{ up }}">Up</a></p>
       {% endif %}

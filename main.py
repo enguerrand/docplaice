@@ -1,4 +1,5 @@
 import os
+import re
 
 import markdown
 from flask import Flask, render_template, abort, send_from_directory
@@ -25,19 +26,31 @@ def render_markdown(path, md_root):
 
 def render_dir(directory, md_root):
     subdirs, pages = list_children_ordered(directory)
-    current_path = directory.replace(md_root, "/")
-    if not current_path.endswith("/"):
-        current_path = current_path + "/"
+    current_path = re.sub("/$", "", directory.replace(md_root, ""))
+
+    current_path_tokens = [""]
+    if current_path != "":
+        current_path_tokens.extend(current_path.split("/"))
+        current_path = "/" + current_path
+
+    current_path = current_path + "/"
+
+    key_word_args = {
+        "current_path": current_path,
+        "current_path_tokens": current_path_tokens,
+        "subdirs": subdirs,
+        "pages": pages,
+        "theme": config.theme,
+    }
     if current_path == "/":
-        return render_template("toc.html", current_path=current_path, subdirs=subdirs, pages=pages, theme=config.theme)
+        return render_template("toc.html", **key_word_args)
     else:
         path = Path(directory.replace(md_root, "/"))
         up = str(path.parent)
         if not up.endswith("/"):
             up = up + "/"
-        return render_template(
-            "toc.html", current_path=current_path, subdirs=subdirs, pages=pages, up=up, theme=config.theme
-        )
+        key_word_args["up"] = up
+        return render_template("toc.html", **key_word_args)
 
 
 def list_children_ordered(parent):
@@ -81,5 +94,11 @@ def catch_all(path):
         return rendered_md
 
 
+def kwargs_printer(**kwargs):
+    print(kwargs)
+
+
 if __name__ == "__main__":
     app.run()
+    # my_args = {"foo": "bar"}
+    # kwargs_printer(**my_args)
