@@ -12,7 +12,11 @@ app = Flask(__name__)
 def render_markdown(path, md_root):
     requested_path = os.path.join(md_root, path)
     if os.path.isdir(requested_path):
-        return render_dir(requested_path, md_root)
+        possible_index = os.path.join(requested_path, "index.md")
+        if os.path.exists(possible_index):
+            return render_file(possible_index)
+        else:
+            return render_dir(requested_path, md_root)
     elif path.endswith(".md"):
         return render_file(requested_path)
     else:
