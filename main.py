@@ -53,21 +53,21 @@ def list_children_ordered(parent):
 
 def render_file(md_file):
     try:
-        with open(md_file, 'r') as file:
+        with open(md_file, "r") as file:
             md = file.read()
     except:
         return None
-    html = markdown.markdown(md, extensions=['extra'])
+    html = markdown.markdown(md, extensions=["extra"])
     return render_template("page.html", title="edrwiki", rendered_markdown=html)
 
 
-@app.route('/css/<path:path>')
+@app.route("/css/<path:path>")
 def send_js(path):
-    return send_from_directory('css', path)
+    return send_from_directory("css", path)
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
 def catch_all(path):
     md_root = config.markdown_root
     if not md_root.endswith("/"):
@@ -79,5 +79,5 @@ def catch_all(path):
         return rendered_md
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()
