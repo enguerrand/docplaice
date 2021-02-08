@@ -223,7 +223,7 @@ h5 {
 h6 {
   font-size: 1.15em;
 }
-h1 > a, h1 > a:visited, h1 > a:hover {
+h1 > a.breadcrumb, h1 > a.breadcrumb:visited, h1 > a.breadcrumb:hover {
   color: #d33682;
   background-color: #073642;
   padding: 0 0.2em;

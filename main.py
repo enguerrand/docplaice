@@ -11,24 +11,34 @@ app = Flask(__name__)
 
 def render_markdown(path, md_root):
     requested_path = os.path.join(md_root, path)
-    if os.path.isdir(requested_path):
-        return render_dir(requested_path, md_root)
+    directory = os.path.isdir(requested_path)
+    new_current_path, new_current_path_tokens = tokenize_path(requested_path.replace(md_root, ""), directory)
+
+    if directory:
+        return render_dir(requested_path, new_current_path, new_current_path_tokens)
     elif path.endswith(".md"):
-        return render_file(requested_path)
+        return render_file(requested_path, new_current_path, new_current_path_tokens)
     else:
         return None
 
 
-def render_dir(directory, md_root):
-    subdirs, pages = list_children_ordered(directory)
-    current_path = re.sub("/$", "", directory.replace(md_root, ""))
-
-    current_path_tokens = [""]
+def tokenize_path(path_to_tokenize, add_slash_to_last):
+    current_path = re.sub("/$", "", path_to_tokenize)
+    current_path = re.sub("^/", "", current_path)
+    current_path_tokens = ["/"]
     if current_path != "":
-        current_path_tokens.extend(current_path.split("/"))
-        current_path = "/" + current_path
+        tokens = current_path.split("/")
+        for token in tokens:
+            current_path_tokens.append(token + "/")
+        if not add_slash_to_last:
+            current_path_tokens[-1] = current_path_tokens[-1].removesuffix("/")
+        current_path = current_path + "/"
+    current_path = "/" + current_path
+    return current_path, current_path_tokens
 
-    current_path = current_path + "/"
+
+def render_dir(directory, current_path, current_path_tokens):
+    subdirs, pages = list_children_ordered(directory)
 
     return render_template(
         "toc.html",
@@ -53,14 +63,21 @@ def list_children_ordered(parent):
     return dirs, files
 
 
-def render_file(md_file):
+def render_file(md_file, current_path, current_path_tokens):
     try:
         with open(md_file, "r") as file:
             md = file.read()
     except:
         return None
     html = markdown.markdown(md, extensions=["extra"])
-    return render_template("page.html", title="edrwiki", rendered_markdown=html, theme=config.theme)
+    return render_template(
+        "page.html",
+        current_path=current_path,
+        current_path_tokens=current_path_tokens,
+        title="edrwiki",
+        rendered_markdown=html,
+        theme=config.theme,
+    )
 
 
 @app.route("/css/<path:path>")

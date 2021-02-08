@@ -6,6 +6,13 @@
   <link rel="stylesheet" type="text/css" href="/css/{{ theme }}.css">
 </head>
 <body>
+  <h1>
+      {% set tokens = [] %}
+      {% for token in current_path_tokens %}
+          {% if tokens.append(token) %} {% endif %}
+          <a class="breadcrumb" href="{{ tokens|join("") }}">{{ token }}</a>
+      {% endfor %}
+  </h1>
   <div id="content">
       {{ rendered_markdown | safe }}
   </div>
