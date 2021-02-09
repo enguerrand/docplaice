@@ -7,11 +7,10 @@
 </head>
 <body>
   <div class="breadcrumbs">
-      {% set tokens = [] %}
-      {% for token in current_path_tokens %}
-          {% if tokens.append(token) %} {% endif %}
-          <a href="{{ tokens|join("") }}">{{ token }}</a>
+      {% for breadcrumb in breadcrumbs %}
+          <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
       {% endfor %}
+
   </div>
   <div id="content">
       {{ rendered_content | safe }}

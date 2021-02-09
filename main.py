@@ -9,15 +9,22 @@ import config
 app = Flask(__name__)
 
 
+class Page:
+    def __init__(self, title, url, level):
+        self.title = title
+        self.url = url
+        self.level = level
+
+
 def render_page(path, md_root):
     requested_path = os.path.join(md_root, path)
     directory = os.path.isdir(requested_path)
-    new_current_path, new_current_path_tokens = tokenize_path(requested_path.replace(md_root, ""), directory)
+    new_current_path, breadcrumbs = build_breadcrumbs(requested_path.replace(md_root, ""), directory)
 
     if directory:
-        html = render_dir(requested_path, new_current_path, new_current_path_tokens)
+        html = render_dir(requested_path, new_current_path)
     elif path.endswith(".md"):
-        html = render_file(requested_path, new_current_path, new_current_path_tokens)
+        html = render_file(requested_path)
     else:
         html = None
     if html is None:
@@ -25,36 +32,38 @@ def render_page(path, md_root):
     else:
         return render_template(
             "page.html",
-            current_path=new_current_path,
-            current_path_tokens=new_current_path_tokens,
-            title=new_current_path_tokens[-1],
+            breadcrumbs=breadcrumbs,
+            title=breadcrumbs[-1].title,
             rendered_content=html,
             theme=config.theme,
         )
 
 
-def tokenize_path(path_to_tokenize, add_slash_to_last):
-    current_path = re.sub("/$", "", path_to_tokenize)
+def build_breadcrumbs(path_to_page, add_slash_to_last):
+    current_path = re.sub("/$", "", path_to_page)
     current_path = re.sub("^/", "", current_path)
-    current_path_tokens = ["/"]
+    breadcrumb_url = "/"
+    breadcrumb_depth = 0
+    breadcrumbs = [Page("Home", breadcrumb_url, breadcrumb_depth)]
     if current_path != "":
         tokens = current_path.split("/")
         for token in tokens:
-            current_path_tokens.append(token + "/")
+            breadcrumb_depth = breadcrumb_depth + 1
+            breadcrumb_url = breadcrumb_url + token + "/"
+            breadcrumbs.append(Page(token, breadcrumb_url, breadcrumb_depth))
         if not add_slash_to_last:
-            current_path_tokens[-1] = current_path_tokens[-1].removesuffix("/")
+            breadcrumbs[-1].url = breadcrumbs[-1].url.removesuffix("/")
         current_path = current_path + "/"
     current_path = "/" + current_path
-    return current_path, current_path_tokens
+    return current_path, breadcrumbs
 
 
-def render_dir(directory, current_path, current_path_tokens):
+def render_dir(directory, current_path):
     subdirs, pages = list_children_ordered(directory)
 
     return render_template(
         "toc.html",
         current_path=current_path,
-        current_path_tokens=current_path_tokens,
         subdirs=subdirs,
         pages=pages,
         theme=config.theme,
@@ -74,7 +83,7 @@ def list_children_ordered(parent):
     return dirs, files
 
 
-def render_file(md_file, current_path, current_path_tokens):
+def render_file(md_file):
     try:
         with open(md_file, "r") as file:
             md = file.read()
