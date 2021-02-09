@@ -1,19 +1,37 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title>{{ title }}</title>
-  <link rel="stylesheet" type="text/css" href="/css/{{ theme }}.css">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-4.6.0.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/{{ theme }}.css">
 </head>
 <body>
-  <div class="breadcrumbs">
-      {% for breadcrumb in breadcrumbs %}
-          <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
-      {% endfor %}
-
-  </div>
-  <div id="content">
-      {{ rendered_content | safe }}
-  </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-2">
+            <div class="sidebar-nav">
+                <ul class="nav flex-column">
+                    {% for nav_entry in side_bar_navigation %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if nav_entry.current -%}current{%- endif %}" style="margin-left: {{ nav_entry.level * 10 }}px" href="{{ nav_entry.url }}">{{ nav_entry.title }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-12 col-sm-7 col-md-8 col-lg-9 col-xl-10">
+            <div class="breadcrumbs">
+                {% for breadcrumb in breadcrumbs %}
+                <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+                {% endfor %}
+            </div>
+            <div id="content">
+                {{ rendered_content | safe }}
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

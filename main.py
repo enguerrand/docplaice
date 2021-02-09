@@ -10,10 +10,11 @@ app = Flask(__name__)
 
 
 class Page:
-    def __init__(self, title, url, level):
+    def __init__(self, title, url, level, current=False):
         self.title = title
         self.url = url
         self.level = level
+        self.current = current
 
 
 def render_page(path, md_root):
@@ -22,11 +23,17 @@ def render_page(path, md_root):
     new_current_path, breadcrumbs = build_breadcrumbs(requested_path.replace(md_root, ""), directory)
 
     if directory:
+        current_section = new_current_path
+    else:
+        current_section = os.path.dirname(to_canonical_relative_path(new_current_path))
+    side_bar_navigation = build_sidebar_navigation(md_root, current_section)
+
+    if directory:
         possible_index = os.path.join(requested_path, "index.md")
         if os.path.exists(possible_index):
             html = render_file(possible_index)
         else:
-            html = render_dir(requested_path, new_current_path)
+            html = render_dir(requested_path, new_current_path, breadcrumbs[-1].title)
     elif path.endswith(".md"):
         html = render_file(requested_path)
     else:
@@ -36,6 +43,7 @@ def render_page(path, md_root):
     else:
         return render_template(
             "page.html",
+            side_bar_navigation=side_bar_navigation,
             breadcrumbs=breadcrumbs,
             title=breadcrumbs[-1].title,
             rendered_content=html,
@@ -43,9 +51,28 @@ def render_page(path, md_root):
         )
 
 
+def build_sidebar_navigation(md_root, path_to_page):
+    here = to_canonical_relative_path(path_to_page)
+    side_bar_navigation = [Page("Home", "/", 0, here == "")]
+    for root, dirs, files in os.walk(md_root, followlinks=True):
+        stripped_root = root.replace(md_root, "/")
+        depth = stripped_root.count(os.sep)
+        for name in dirs:
+            url = os.path.join(stripped_root, name)
+            page = Page(name, url, depth, here == to_canonical_relative_path(url))
+            side_bar_navigation.append(page)
+    side_bar_navigation.sort(key=lambda page: page.url)
+    return side_bar_navigation
+
+
+def build_page(depth, name, root):
+    url = os.path.join(root, name)
+    page = Page(name, url, depth)
+    return page
+
+
 def build_breadcrumbs(path_to_page, add_slash_to_last):
-    current_path = re.sub("/$", "", path_to_page)
-    current_path = re.sub("^/", "", current_path)
+    current_path = to_canonical_relative_path(path_to_page)
     breadcrumb_url = "/"
     breadcrumb_depth = 0
     breadcrumbs = [Page("Home", breadcrumb_url, breadcrumb_depth)]
@@ -62,11 +89,18 @@ def build_breadcrumbs(path_to_page, add_slash_to_last):
     return current_path, breadcrumbs
 
 
-def render_dir(directory, current_path):
+def to_canonical_relative_path(path_to_page):
+    removed_trailing = re.sub("/$", "", path_to_page)
+    removed_leading = re.sub("^/", "", removed_trailing)
+    return removed_leading
+
+
+def render_dir(directory, current_path, section_title):
     subdirs, pages = list_children_ordered(directory)
 
     return render_template(
         "toc.html",
+        title=section_title,
         current_path=current_path,
         subdirs=subdirs,
         pages=pages,
@@ -97,7 +131,7 @@ def render_file(md_file):
 
 
 @app.route("/css/<path:path>")
-def send_js(path):
+def send_css(path):
     return send_from_directory("css", path)
 
 
@@ -120,5 +154,3 @@ def kwargs_printer(**kwargs):
 
 if __name__ == "__main__":
     app.run()
-    # my_args = {"foo": "bar"}
-    # kwargs_printer(**my_args)

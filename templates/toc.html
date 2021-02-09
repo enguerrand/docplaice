@@ -1,10 +1,5 @@
-      <p>Subsections:</p>
-      <ul>
-          {% for child in subdirs %}
-          <li><a href="{{ current_path }}{{ child }}">{{ child }}</a></li>
-          {% endfor %}
-      </ul>
-      <p>Pages:</p>
+      <h1>{{ title }}</h1>
+      <p>Pages in this section:</p>
       <ul>
           {% for child in pages %}
           <li><a href="{{ current_path }}{{ child }}">{{ child }}</a></li>
