@@ -22,7 +22,11 @@ def render_page(path, md_root):
     new_current_path, breadcrumbs = build_breadcrumbs(requested_path.replace(md_root, ""), directory)
 
     if directory:
-        html = render_dir(requested_path, new_current_path)
+        possible_index = os.path.join(requested_path, "index.md")
+        if os.path.exists(possible_index):
+            html = render_file(possible_index)
+        else:
+            html = render_dir(requested_path, new_current_path)
     elif path.endswith(".md"):
         html = render_file(requested_path)
     else:
