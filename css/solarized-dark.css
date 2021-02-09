@@ -27,9 +27,15 @@ THE SOFTWARE.
 
 html {
   font-family: sans-serif;
+  background-color: #073642;
+  margin: 1em;
 }
 body {
   margin: 0;
+  background-color: #002b36;
+  border: 1pt solid #586e75;
+  padding: 1em 0;
+  color: #839496;
 }
 a:focus {
   outline: thin dotted;
@@ -160,16 +166,6 @@ h6 {
   font-family: 'PT Sans Narrow', sans-serif;
   font-weight: 700;
 }
-html {
-  background-color: #073642;
-  margin: 1em;
-}
-body {
-  background-color: #002b36;
-  border: 1pt solid #586e75;
-  padding: 1em;
-  color: #839496;
-}
 code {
   background-color: #073642;
   padding: 2px;
@@ -234,24 +230,32 @@ div.sidebar-nav ul li {
 div.sidebar-nav ul li a {
     padding: 10px;
     flex-grow: 1;
+    -webkit-border-radius: 0.2em;
+    -moz-border-radius: 0.2em;
+    border-radius: 0.2em;
+    background-color: #004658;
+    font-weight: bold;
 }
 
 div.sidebar-nav ul li a, div.sidebar-nav ul li a:visited {
     color: #9d9d9a;
-    background: #004658;
 }
 
-div.sidebar-nav ul li a:hover, div.sidebar-nav ul li a.current {
+div.sidebar-nav ul li a:hover {
     color: #002b36;
     background-color: #dc322f;
+}
+
+div.sidebar-nav ul li a.current {
+    color: #002b36;
+    background-color: #2aa198;
 }
 
 div.breadcrumbs > a, div.breadcrumbs > a:visited, div.breadcrumbs > a:hover {
   font-size: 1.6em;
   color: #002b36;
-  background-color: #dc322f;
+  background-color: #268bd2;
   padding: 0 0.2em;
-  border: 1px solid #073642;
   -webkit-border-radius: 0.2em;
   -moz-border-radius: 0.2em;
   border-radius: 0.2em;
