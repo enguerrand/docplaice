@@ -9,17 +9,28 @@ import config
 app = Flask(__name__)
 
 
-def render_markdown(path, md_root):
+def render_page(path, md_root):
     requested_path = os.path.join(md_root, path)
     directory = os.path.isdir(requested_path)
     new_current_path, new_current_path_tokens = tokenize_path(requested_path.replace(md_root, ""), directory)
 
     if directory:
-        return render_dir(requested_path, new_current_path, new_current_path_tokens)
+        html = render_dir(requested_path, new_current_path, new_current_path_tokens)
     elif path.endswith(".md"):
-        return render_file(requested_path, new_current_path, new_current_path_tokens)
+        html = render_file(requested_path, new_current_path, new_current_path_tokens)
     else:
+        html = None
+    if html is None:
         return None
+    else:
+        return render_template(
+            "page.html",
+            current_path=new_current_path,
+            current_path_tokens=new_current_path_tokens,
+            title=new_current_path_tokens[-1],
+            rendered_content=html,
+            theme=config.theme,
+        )
 
 
 def tokenize_path(path_to_tokenize, add_slash_to_last):
@@ -69,15 +80,7 @@ def render_file(md_file, current_path, current_path_tokens):
             md = file.read()
     except:
         return None
-    html = markdown.markdown(md, extensions=["extra"])
-    return render_template(
-        "page.html",
-        current_path=current_path,
-        current_path_tokens=current_path_tokens,
-        title="edrwiki",
-        rendered_markdown=html,
-        theme=config.theme,
-    )
+    return markdown.markdown(md, extensions=["extra"])
 
 
 @app.route("/css/<path:path>")
@@ -91,11 +94,11 @@ def catch_all(path):
     md_root = config.markdown_root
     if not md_root.endswith("/"):
         md_root = md_root + "/"
-    rendered_md = render_markdown(path, md_root)
-    if rendered_md is None:
+    rendered_page = render_page(path, md_root)
+    if rendered_page is None:
         abort(404)
     else:
-        return rendered_md
+        return rendered_page
 
 
 def kwargs_printer(**kwargs):
