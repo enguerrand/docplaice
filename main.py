@@ -34,10 +34,11 @@ def render_page(path, md_root):
         if os.path.exists(possible_index):
             html = html + render_file(possible_index) + "\n"
         html = html + render_dir(requested_path, new_current_path, breadcrumbs[-1].title)
-    elif path.endswith(".md"):
-        html = render_file(requested_path)
     else:
-        html = None
+        if path.endswith(".md"):
+            html = render_file(requested_path)
+        else:
+            html = render_file(requested_path + ".md")
     if html is None:
         return None
     else:
