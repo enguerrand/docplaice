@@ -24,6 +24,10 @@ a:visited {
     color: {{ theme.linksVisited }};
 }
 
+div.sidebar-nav {
+    margin-top: 20px;
+}
+
 div.sidebar-nav ul {
     padding: 0;
 }
@@ -59,15 +63,23 @@ div.sidebar-nav ul li a.current {
     font-weight: bold;
 }
 
+div.top {
+    border-bottom: {{ theme.borders }};
+}
+
+div.sidebar-wrapper {
+    padding-top: 10px;
+
+}
+
 div.breadcrumbs {
-    margin-top: 3px;
+    margin: 3px 3px 10px 3px;
 }
 
 div.breadcrumbs > a, div.breadcrumbs > a:visited, div.breadcrumbs > a:hover {
-  font-size: 1.6em;
   color: {{ theme.breadcrumb }};
   background-color: {{ theme.breadcrumbBackground }};
-  padding: 0 0.2em;
+  padding: 0.3em;
   -webkit-border-radius: 0.2em;
   -moz-border-radius: 0.2em;
   border-radius: 0.2em;

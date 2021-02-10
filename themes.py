@@ -16,43 +16,44 @@ solarized_blue = "#268bd2"
 solarized_cyan = "#2aa198"
 solarized_green = "#859900"
 
+solarized_accent = solarized_orange
 
 solarized_light = {
     "background": solarized_base3,
     "bodyText": solarized_base00,
-    "heading1": solarized_orange,
+    "heading1": solarized_accent,
     "headings": solarized_base01,
-    "links": solarized_orange,
+    "links": solarized_accent,
     "linksVisited": solarized_red,
-    "breadcrumb": solarized_base00,
-    "breadcrumbBackground": solarized_base2,
+    "breadcrumb": solarized_base3,
+    "breadcrumbBackground": solarized_base1,
     "code": solarized_base00,
     "codeBackground": solarized_base2,
     "nav": solarized_base01,
     "navCurrent": solarized_base2,
     "navHover": solarized_base01,
     "navBackground": solarized_base2,
-    "navCurrentBackground": solarized_orange,
+    "navCurrentBackground": solarized_accent,
     "navHoverBackground": solarized_base2,
-    "borders": solarized_base2,
+    "borders": "solid 1px " + solarized_accent,
 }
 
 solarized_dark = {
     "background": solarized_base03,
     "bodyText": solarized_base0,
-    "heading1": solarized_orange,
+    "heading1": solarized_accent,
     "headings": solarized_base1,
-    "links": solarized_orange,
+    "links": solarized_accent,
     "linksVisited": solarized_red,
-    "breadcrumb": solarized_base0,
-    "breadcrumbBackground": solarized_base02,
+    "breadcrumb": solarized_base03,
+    "breadcrumbBackground": solarized_base01,
     "code": solarized_base0,
     "codeBackground": solarized_base02,
     "nav": solarized_base1,
     "navCurrent": solarized_base02,
     "navHover": solarized_base1,
     "navBackground": solarized_base02,
-    "navCurrentBackground": solarized_orange,
+    "navCurrentBackground": solarized_accent,
     "navHoverBackground": solarized_base02,
-    "borders": solarized_base02,
+    "borders": "solid 1px " + solarized_accent,
 }

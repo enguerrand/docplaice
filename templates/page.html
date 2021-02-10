@@ -10,7 +10,17 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+        <div class="col-12 top">
+            <div class="breadcrumbs">
+                You are here:
+                {% for breadcrumb in breadcrumbs %}
+                <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 sidebar-wrapper">
             <div class="sidebar-nav">
                 <ul class="nav flex-column">
                     {% for nav_entry in side_bar_navigation %}
@@ -22,11 +32,6 @@
             </div>
         </div>
         <div class="col-12 col-sm-6 col-md-7 col-lg-8 col-xl-9">
-            <div class="breadcrumbs">
-                {% for breadcrumb in breadcrumbs %}
-                <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
-                {% endfor %}
-            </div>
             <div id="content">
                 {{ rendered_content | safe }}
             </div>
