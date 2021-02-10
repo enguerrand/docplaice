@@ -105,7 +105,8 @@ def render_dir(directory, current_path, section_title):
     pages = []
     for child in children:
         if child != "index.md" and os.path.isfile(os.path.join(directory, child)):
-            pages.append(child)
+            page_name = re.sub("\\.md$", "", child)
+            pages.append(page_name)
 
     if len(pages) == 0:
         return ""
