@@ -4,16 +4,16 @@ body {
     background-color: {{ theme.background }};
 }
 
+#content {
+    margin-top: 2em;
+}
+
 h1 {
     color: {{ theme.heading1 }};
 }
 
 h2, h3, h4, h5, h6 {
     color: {{ theme.headings }};
-}
-
-h1 {
-    margin-top: 1em;
 }
 
 a {

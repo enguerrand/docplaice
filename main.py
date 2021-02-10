@@ -30,10 +30,10 @@ def render_page(path, md_root):
 
     if directory:
         possible_index = os.path.join(requested_path, "index.md")
+        html = ""
         if os.path.exists(possible_index):
-            html = render_file(possible_index)
-        else:
-            html = render_dir(requested_path, new_current_path, breadcrumbs[-1].title)
+            html = html + render_file(possible_index) + "\n"
+        html = html + render_dir(requested_path, new_current_path, breadcrumbs[-1].title)
     elif path.endswith(".md"):
         html = render_file(requested_path)
     else:
@@ -97,29 +97,22 @@ def to_canonical_relative_path(path_to_page):
 
 
 def render_dir(directory, current_path, section_title):
-    subdirs, pages = list_children_ordered(directory)
+    children = os.listdir(directory)
+    children.sort()
+    pages = []
+    for child in children:
+        if child != "index.md" and os.path.isfile(os.path.join(directory, child)):
+            pages.append(child)
 
+    if len(pages) == 0:
+        return ""
     return render_template(
         "toc.html",
         title=section_title,
         current_path=current_path,
-        subdirs=subdirs,
         pages=pages,
         theme=config.theme,
     )
-
-
-def list_children_ordered(parent):
-    children = os.listdir(parent)
-    children.sort()
-    dirs = []
-    files = []
-    for child in children:
-        if os.path.isdir(os.path.join(parent, child)):
-            dirs.append(child)
-        else:
-            files.append(child)
-    return dirs, files
 
 
 def render_file(md_file):
