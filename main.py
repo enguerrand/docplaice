@@ -44,6 +44,7 @@ def render_page(path, md_root):
     else:
         return render_template(
             "page.html",
+            wiki_name=config.wiki_name,
             side_bar_navigation=side_bar_navigation,
             breadcrumbs=breadcrumbs,
             title=breadcrumbs[-1].title,
@@ -156,4 +157,4 @@ def kwargs_printer(**kwargs):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run("0.0.0.0")

@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-12 top">
             <div class="breadcrumbs">
-                You are here:
+                <b class="wiki-name">{{ wiki_name }}</b>
                 {% for breadcrumb in breadcrumbs %}
                 <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
                 {% endfor %}
