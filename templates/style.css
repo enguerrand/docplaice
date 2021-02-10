@@ -16,11 +16,11 @@ h2, h3, h4, h5, h6 {
     color: {{ theme.headings }};
 }
 
-a {
+a, a:hover {
     color: {{ theme.links }};
 }
 
-a:visited {
+a:visited, a:visited:hover {
     color: {{ theme.linksVisited }};
 }
 
