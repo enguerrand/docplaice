@@ -55,6 +55,7 @@ def build_sidebar_navigation(md_root, path_to_page):
     here = to_canonical_relative_path(path_to_page)
     side_bar_navigation = [Page("Home", "/", 0, here == "")]
     for root, dirs, files in os.walk(md_root, followlinks=True):
+        dirs[:] = [d for d in dirs if not d[0] == "."]
         stripped_root = root.replace(md_root, "/")
         depth = stripped_root.count(os.sep)
         for name in dirs:
