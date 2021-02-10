@@ -2,7 +2,7 @@ import os
 import re
 
 import markdown
-from flask import Flask, render_template, abort, send_from_directory
+from flask import Flask, Response, render_template, abort, send_from_directory
 
 import config
 
@@ -130,9 +130,14 @@ def render_file(md_file):
     return markdown.markdown(md, extensions=["extra"])
 
 
-@app.route("/css/<path:path>")
-def send_css(path):
-    return send_from_directory("css", path)
+@app.route("/css/style.css")
+def css():
+    return Response(render_template("style.css", theme=config.theme), mimetype="text/css")
+
+
+@app.route("/assets/<path:path>")
+def serve_assets(path):
+    return send_from_directory("assets", path)
 
 
 @app.route("/", defaults={"path": ""})
