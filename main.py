@@ -105,9 +105,14 @@ def render_dir(directory, current_path, section_title):
     children.sort()
     pages = []
     for child in children:
-        if child != "index.md" and os.path.isfile(os.path.join(directory, child)):
-            page_name = re.sub("\\.md$", "", child)
-            pages.append(page_name)
+        if starts_with_dot(child):
+            continue
+        if child == "index.md":
+            continue
+        if not os.path.isfile(os.path.join(directory, child)):
+            continue
+        page_name = re.sub("\\.md$", "", child)
+        pages.append(page_name)
 
     if len(pages) == 0:
         return ""
@@ -134,8 +139,12 @@ def remove_trailing_slash(input):
 
 
 def contains_hidden_files_or_dirs(path):
-    path_contains_hidden_files_or_dirs = any(re.compile('^\\..*').match(path_elem) for path_elem in path.split("/"))
+    path_contains_hidden_files_or_dirs = any(starts_with_dot(path_elem) for path_elem in path.split("/"))
     return path_contains_hidden_files_or_dirs
+
+
+def starts_with_dot(char_sequence):
+    return re.compile('^\\..*').match(char_sequence)
 
 
 @app.route("/css/style.css")
