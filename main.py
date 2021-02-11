@@ -88,7 +88,7 @@ def build_breadcrumbs(path_to_page, add_slash_to_last):
             breadcrumb_url = breadcrumb_url + token + "/"
             breadcrumbs.append(Page(token, breadcrumb_url, breadcrumb_depth))
         if not add_slash_to_last:
-            breadcrumbs[-1].url = breadcrumbs[-1].url.removesuffix("/")
+            breadcrumbs[-1].url = remove_trailing_slash(breadcrumbs[-1].url)
         current_path = current_path + "/"
     current_path = "/" + current_path
     return current_path, breadcrumbs
@@ -127,6 +127,10 @@ def render_file(md_file):
     except:
         return None
     return markdown.markdown(md, extensions=["extra"])
+
+
+def remove_trailing_slash(input):
+    return re.sub("/$", "", input)
 
 
 def contains_hidden_files_or_dirs(path):
