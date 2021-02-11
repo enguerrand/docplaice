@@ -129,6 +129,11 @@ def render_file(md_file):
     return markdown.markdown(md, extensions=["extra"])
 
 
+def contains_hidden_files_or_dirs(path):
+    path_contains_hidden_files_or_dirs = any(re.compile('^\\..*').match(path_elem) for path_elem in path.split("/"))
+    return path_contains_hidden_files_or_dirs
+
+
 @app.route("/css/style.css")
 def css():
     return Response(render_template("style.css", theme=config.theme), mimetype="text/css")
@@ -142,6 +147,9 @@ def serve_assets(path):
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def catch_all(path):
+    if contains_hidden_files_or_dirs(path):
+        abort(404)
+
     md_root = config.markdown_root
     if not md_root.endswith("/"):
         md_root = md_root + "/"
