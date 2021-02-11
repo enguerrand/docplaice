@@ -85,6 +85,8 @@ div.breadcrumbs > a, div.breadcrumbs > a:visited, div.breadcrumbs > a:hover {
   color: {{ theme.breadcrumb }};
   background-color: {{ theme.breadcrumbBackground }};
   padding: 0.3em;
+  margin: 5px 0;
+  display: inline-block;
   -webkit-border-radius: 0.2em;
   -moz-border-radius: 0.2em;
   border-radius: 0.2em;
@@ -111,8 +113,43 @@ pre, code {
 
 .section-toc {
   padding: 10px;
+  -webkit-column-gap: 3em;
+  -moz-column-gap: 3em;
+  column-gap: 3em;
 }
 
 .section-toc > div {
   padding: 3px 0;
+}
+
+@media (min-width: 1800px) {
+  .section-toc {
+    -webkit-column-count: 4;
+    -moz-column-count: 4;
+    column-count: 4;
+  }
+}
+
+@media (min-width: 1400px) and (max-width: 1800px) {
+  .section-toc {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1400px) {
+  .section-toc {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+  }
+}
+
+@media (max-width: 1000px) {
+  .section-toc {
+    -webkit-column-count: 1;
+    -moz-column-count: 1;
+    column-count: 1;
+  }
 }

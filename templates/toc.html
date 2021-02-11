@@ -1,8 +1,8 @@
       <h2>Pages in this section:</h2>
-      <div class="section-toc row">
+      <div class="section-toc">
           {% for child in pages %}
-          <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+          <p>
               <a href="{{ current_path }}{{ child }}">{{ child }}</a>
-          </div>
+          </p>
           {% endfor %}
       </div>
