@@ -108,3 +108,11 @@ pre, code {
   font-family: monospace, serif;
   font-size: 1em;
 }
+
+.section-toc {
+  padding: 10px;
+}
+
+.section-toc > div {
+  padding: 3px 0;
+}
