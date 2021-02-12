@@ -22,7 +22,7 @@ def render_page(path, md_root):
     requested_path = os.path.join(md_root, path)
     directory = os.path.isdir(requested_path)
 
-    if directory and not path.endswith("/"):
+    if directory and not path.endswith("/") and path != "":
         return redirect(path + "/", code=301)
 
     new_current_path, breadcrumbs = build_breadcrumbs(requested_path.replace(md_root, ""), directory)
