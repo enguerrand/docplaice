@@ -3,6 +3,7 @@ import re
 
 import markdown
 from flask import Flask, Response, render_template, abort, send_from_directory
+from werkzeug.utils import redirect
 
 import config
 
@@ -20,6 +21,10 @@ class Page:
 def render_page(path, md_root):
     requested_path = os.path.join(md_root, path)
     directory = os.path.isdir(requested_path)
+
+    if directory and not path.endswith("/"):
+        return redirect(path + "/", code=301)
+
     new_current_path, breadcrumbs = build_breadcrumbs(requested_path.replace(md_root, ""), directory)
 
     if directory:
