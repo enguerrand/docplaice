@@ -68,7 +68,7 @@ def build_sidebar_navigation(md_root, path_to_page):
             stripped_root = stripped_root + "/"
         depth = stripped_root.count(os.sep)
         for name in dirs:
-            url = os.path.join(stripped_root, name)
+            url = os.path.join(stripped_root, name) + "/"
             page = Page(name, url, depth, here == to_canonical_relative_path(url))
             side_bar_navigation.append(page)
     side_bar_navigation.sort(key=lambda page: page.url)
