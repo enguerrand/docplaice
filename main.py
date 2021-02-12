@@ -55,7 +55,7 @@ def render_page(path, md_root):
 
 def build_sidebar_navigation(md_root, path_to_page):
     here = to_canonical_relative_path(path_to_page)
-    side_bar_navigation = [Page("Home", "/", 0, here == "")]
+    side_bar_navigation = [Page("home", "/", 0, here == "")]
     for root, dirs, files in os.walk(md_root, followlinks=True):
         dirs[:] = [d for d in dirs if not d[0] == "."]
         stripped_root = root.replace(md_root, "/")
@@ -80,7 +80,7 @@ def build_breadcrumbs(path_to_page, add_slash_to_last):
     current_path = to_canonical_relative_path(path_to_page)
     breadcrumb_url = "/"
     breadcrumb_depth = 0
-    breadcrumbs = [Page("Home", breadcrumb_url, breadcrumb_depth)]
+    breadcrumbs = [Page("home", breadcrumb_url, breadcrumb_depth)]
     if current_path != "":
         tokens = current_path.split("/")
         for token in tokens:
