@@ -36,6 +36,7 @@ solarized_light = {
     "navCurrentBackground": solarized_accent,
     "navHoverBackground": solarized_base2,
     "borders": "solid 1px " + solarized_accent,
+    "iconColor": solarized_accent,
 }
 
 solarized_dark = {
@@ -56,4 +57,5 @@ solarized_dark = {
     "navCurrentBackground": solarized_accent,
     "navHoverBackground": solarized_base02,
     "borders": "solid 1px " + solarized_accent,
+    "iconColor": solarized_accent,
 }

@@ -157,6 +157,11 @@ def css():
     return Response(render_template("style.css", theme=config.theme), mimetype="text/css")
 
 
+@app.route("/img/docplaice.svg")
+def svg():
+    return Response(render_template("docplaice.svg", theme=config.theme), mimetype="image/svg+xml")
+
+
 @app.route("/assets/<path:path>")
 def serve_assets(path):
     return send_from_directory("assets", path)
