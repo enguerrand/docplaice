@@ -85,7 +85,7 @@ def build_breadcrumbs(path_to_page, add_slash_to_last):
     current_path = to_canonical_relative_path(path_to_page)
     breadcrumb_url = "/"
     breadcrumb_depth = 0
-    breadcrumbs = [Page("home", breadcrumb_url, breadcrumb_depth)]
+    breadcrumbs = [Page(config.wiki_name, breadcrumb_url, breadcrumb_depth)]
     if current_path != "":
         tokens = current_path.split("/")
         for token in tokens:
