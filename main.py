@@ -120,6 +120,8 @@ def render_dir(directory, current_path, section_title):
     children.sort()
     pages = []
     for child in children:
+        if starts_with_dot(child):
+            continue
         if child == "index.md":
             continue
         if not os.path.isfile(os.path.join(directory, child)):
@@ -156,6 +158,10 @@ def contains_forbidden_chars(path):
     if re.compile(REGEX_PATH_WHITELIST).match(stripped_md_ext):
         return False
     return True
+
+
+def starts_with_dot(char_sequence):
+    return re.compile('^\\..*').match(char_sequence)
 
 
 @app.route("/css/style.css")
