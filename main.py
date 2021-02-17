@@ -22,6 +22,13 @@ class Page:
 
 
 def render_page(path, md_root):
+    try:
+        return render_page_unsafe(path, md_root)
+    except Exception:
+        return None
+
+
+def render_page_unsafe(path, md_root):
     requested_path = os.path.join(md_root, path)
     directory = os.path.isdir(requested_path)
 
