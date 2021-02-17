@@ -7,6 +7,9 @@ from werkzeug.utils import redirect
 
 import config
 
+REGEX_MD_EXT = "\\.md$"
+REGEX_PATH_WHITELIST = "^[0-9a-zA-Z/_\\-]*$"
+
 app = Flask(__name__)
 
 
@@ -116,7 +119,7 @@ def render_dir(directory, current_path, section_title):
             continue
         if not os.path.isfile(os.path.join(directory, child)):
             continue
-        page_name = re.sub("\\.md$", "", child)
+        page_name = re.sub(REGEX_MD_EXT, "", child)
         pages.append(page_name)
 
     if len(pages) == 0:
@@ -143,9 +146,11 @@ def remove_trailing_slash(input):
     return re.sub("/$", "", input)
 
 
-def contains_hidden_files_or_dirs(path):
-    path_contains_hidden_files_or_dirs = any(starts_with_dot(path_elem) for path_elem in path.split("/"))
-    return path_contains_hidden_files_or_dirs
+def contains_forbidden_chars(path):
+    stripped_md_ext = re.sub(REGEX_MD_EXT, "", path)
+    if re.compile(REGEX_PATH_WHITELIST).match(stripped_md_ext):
+        return False
+    return True
 
 
 def starts_with_dot(char_sequence):
@@ -170,7 +175,7 @@ def serve_assets(path):
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def catch_all(path):
-    if contains_hidden_files_or_dirs(path):
+    if contains_forbidden_chars(path):
         abort(404)
 
     md_root = config.markdown_root
