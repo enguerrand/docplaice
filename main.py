@@ -113,8 +113,6 @@ def render_dir(directory, current_path, section_title):
     children.sort()
     pages = []
     for child in children:
-        if starts_with_dot(child):
-            continue
         if child == "index.md":
             continue
         if not os.path.isfile(os.path.join(directory, child)):
@@ -153,10 +151,6 @@ def contains_forbidden_chars(path):
     return True
 
 
-def starts_with_dot(char_sequence):
-    return re.compile('^\\..*').match(char_sequence)
-
-
 @app.route("/css/style.css")
 def css():
     return Response(render_template("style.css", theme=config.theme), mimetype="text/css")
@@ -186,10 +180,6 @@ def catch_all(path):
         abort(404)
     else:
         return rendered_page
-
-
-def kwargs_printer(**kwargs):
-    print(kwargs)
 
 
 if __name__ == "__main__":
