@@ -58,7 +58,7 @@ def render_page_unsafe(path, md_root):
     if html is None:
         return None
     else:
-        search_index = build_search_index(config.search_type)
+        search_index = build_search_index(config.search_type, md_root)
         return render_template(
             "page.html",
             wiki_name=config.wiki_name,
@@ -152,42 +152,29 @@ def render_file(md_file):
     return markdown.markdown(md, extensions=["extra"])
 
 
-def build_search_index(search_type):
-    if search_type is None or search_type == "none":
-        return None
+def build_search_index(search_type, md_root):
+    if search_type == "page-name":
+        search_index = {}
+        for root, dirs, files in os.walk(md_root, followlinks=True):
+            dirs[:] = [d for d in dirs if not d[0] == "."]
+            stripped_root = root.replace(md_root, "/")
+            if stripped_root != "/" and not stripped_root.endswith("/"):
+                stripped_root = stripped_root + "/"
+            for name in files:
+                if name != "index.md":
+                    url = os.path.join(stripped_root, name)
+                    try:
+                        matches = search_index[name]
+                    except KeyError:
+                        matches = []
+                        search_index[name] = matches
+                    matches.append({
+                        "name": name,
+                        "url": url
+                    })
+        return search_index
     else:
-        return {
-            "foo": [
-                {
-                    "name": "art-foo1",
-                    "url": "http://foo1"
-                },
-                {
-                    "name": "art-foo2",
-                    "url": "http://foo2"
-                }
-            ],
-            "bar": [
-                {
-                    "name": "art-bar1",
-                    "url": "http://bar1"
-                },
-                {
-                    "name": "art-bar2",
-                    "url": "http://bar2"
-                }
-            ],
-            "baz": [
-                {
-                    "name": "art-baz1",
-                    "url": "http://baz1"
-                },
-                {
-                    "name": "art-baz2",
-                    "url": "http://baz2"
-                }
-            ]
-        }
+        return None
 
 
 def remove_trailing_slash(input):
