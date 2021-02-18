@@ -75,13 +75,12 @@ def build_sidebar_navigation(md_root, path_to_page):
     here = to_canonical_relative_path(path_to_page)
     side_bar_navigation = [Page("home", "/", 0, here == "")]
     for root, dirs, files in os.walk(md_root, followlinks=True):
-        dirs[:] = [d for d in dirs if not d[0] == "."]
-        stripped_root = root.replace(md_root, "/")
-        if stripped_root != "/" and not stripped_root.endswith("/"):
-            stripped_root = stripped_root + "/"
+        stripped_root = strip_root(md_root, root)
         depth = stripped_root.count(os.sep)
         for name in dirs:
             url = os.path.join(stripped_root, name) + "/"
+            if contains_forbidden_chars(url):
+                continue
             page = Page(name, url, depth, here == to_canonical_relative_path(url))
             side_bar_navigation.append(page)
     side_bar_navigation.sort(key=lambda page: page.url)
@@ -156,25 +155,32 @@ def build_search_index(search_type, md_root):
     if search_type == "page-name":
         search_index = {}
         for root, dirs, files in os.walk(md_root, followlinks=True):
-            dirs[:] = [d for d in dirs if not d[0] == "."]
-            stripped_root = root.replace(md_root, "/")
-            if stripped_root != "/" and not stripped_root.endswith("/"):
-                stripped_root = stripped_root + "/"
+            stripped_root = strip_root(md_root, root)
             for name in files:
-                if name != "index.md":
-                    url = os.path.join(stripped_root, name)
-                    try:
-                        matches = search_index[name]
-                    except KeyError:
-                        matches = []
-                        search_index[name] = matches
-                    matches.append({
-                        "name": name,
-                        "url": url
-                    })
+                if name == "index.md":
+                    continue
+                url = os.path.join(stripped_root, name)
+                if contains_forbidden_chars(url):
+                    continue
+                try:
+                    matches = search_index[name]
+                except KeyError:
+                    matches = []
+                    search_index[name] = matches
+                matches.append({
+                    "name": name,
+                    "url": url
+                })
         return search_index
     else:
         return None
+
+
+def strip_root(md_root, relative_to):
+    stripped_root = relative_to.replace(md_root, "/")
+    if stripped_root != "/" and not stripped_root.endswith("/"):
+        stripped_root = stripped_root + "/"
+    return stripped_root
 
 
 def remove_trailing_slash(input):
