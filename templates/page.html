@@ -4,6 +4,18 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ title }}</title>
+    {% if search_index is defined and search_index is not none %}
+    {% set breadcrumb_col_class = "col-8" %}
+    {% set search_col_class = "col-4" %}
+    <script>
+    search_index = {{ search_index | safe }}
+    </script>
+    <script src="/assets/react.development.v17.0.1.js" crossorigin></script>
+    <script src="/assets/react-dom.development.v17.0.1.js" crossorigin></script>
+    <script src="/assets/search.js"></script>
+    {% else %}
+    {% set breadcrumb_col_class = "col-12" %}
+    {% endif %}
     <link rel="stylesheet" type="text/css" href="/assets/bootstrap-4.6.0.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <link rel="icon" href="/img/docplaice.svg">
@@ -11,7 +23,7 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 top">
+        <div class="{{ breadcrumb_col_class }} top">
             <img class="docplaice-icon" alt="docplaice icon" src="/img/docplaice.svg" title="docplaice - a place for flat file documentation">
             <div class="breadcrumbs">
                 {% for breadcrumb in breadcrumbs %}
@@ -19,6 +31,12 @@
                 {% endfor %}
             </div>
         </div>
+        {% if search_col_class is defined %}
+        <div class="{{ search_col_class }} top">
+            <input id="search" type="text" placeholder="search" autocomplete="off">
+            <div id="search-results"></div>
+        </div>
+        {% endif %}
     </div>
     <div class="row">
         <div class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 sidebar-wrapper">

@@ -101,6 +101,32 @@ div.breadcrumbs > a, div.breadcrumbs > a:visited, div.breadcrumbs > a:hover {
   border-radius: 0.2em;
 }
 
+input#search {
+    width: 100%;
+    color: {{ theme.search }};
+    background: {{ theme.searchBackground }};
+    border: {{ theme.borders }};
+    padding: 3px;
+}
+
+input#search:focus {
+    border: {{ theme.borders }};
+    outline: none !important;
+}
+
+#search-results {
+    position: absolute;
+    margin: 39px 15px 0 15px;
+    left: 0;
+    right: 0;
+    top: 24px;
+    background: white;
+}
+
+#search-results a {
+    display: block;
+}
+
 pre {
   padding: 15px;
 }

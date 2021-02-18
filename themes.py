@@ -37,6 +37,8 @@ solarized_light = {
     "navHoverBackground": solarized_base2,
     "borders": "solid 1px " + solarized_accent,
     "iconColor": solarized_accent,
+    "search": solarized_base00,
+    "searchBackground": solarized_base2,
 }
 
 solarized_dark = {
@@ -58,4 +60,6 @@ solarized_dark = {
     "navHoverBackground": solarized_base02,
     "borders": "solid 1px " + solarized_accent,
     "iconColor": solarized_accent,
+    "search": solarized_base0,
+    "searchBackground": solarized_base02,
 }

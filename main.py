@@ -24,7 +24,8 @@ class Page:
 def render_page(path, md_root):
     try:
         return render_page_unsafe(path, md_root)
-    except Exception:
+    except Exception as e:
+        print(e)
         return None
 
 
@@ -57,6 +58,7 @@ def render_page_unsafe(path, md_root):
     if html is None:
         return None
     else:
+        search_index = build_search_index(config.search_type)
         return render_template(
             "page.html",
             wiki_name=config.wiki_name,
@@ -65,6 +67,7 @@ def render_page_unsafe(path, md_root):
             title=breadcrumbs[-1].title,
             rendered_content=html,
             theme=config.theme,
+            search_index=search_index
         )
 
 
@@ -147,6 +150,44 @@ def render_file(md_file):
     except:
         return None
     return markdown.markdown(md, extensions=["extra"])
+
+
+def build_search_index(search_type):
+    if search_type is None or search_type == "none":
+        return None
+    else:
+        return {
+            "foo": [
+                {
+                    "name": "art-foo1",
+                    "url": "http://foo1"
+                },
+                {
+                    "name": "art-foo2",
+                    "url": "http://foo2"
+                }
+            ],
+            "bar": [
+                {
+                    "name": "art-bar1",
+                    "url": "http://bar1"
+                },
+                {
+                    "name": "art-bar2",
+                    "url": "http://bar2"
+                }
+            ],
+            "baz": [
+                {
+                    "name": "art-baz1",
+                    "url": "http://baz1"
+                },
+                {
+                    "name": "art-baz2",
+                    "url": "http://baz2"
+                }
+            ]
+        }
 
 
 def remove_trailing_slash(input):

@@ -14,6 +14,8 @@ You can find a complete list of these projects in the [requirements file](requir
 
 The [bootstrap css](https://getbootstrap.com/) file contained in this repository contains the relevant licensing information inline.
 
+The search field uses [reactjs](https://reactjs.org/) licensed under the [MIT license](https://github.com/facebook/react/blob/master/LICENSE).
+
 The provided colorschemes are using
 [Ethan Schoonover's awesome solarized theme](https://ethanschoonover.com/solarized/), the license of which 
 can be found on the project's [github repo](https://github.com/altercation/solarized/blob/master/LICENSE)    
