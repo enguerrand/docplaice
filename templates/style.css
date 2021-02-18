@@ -121,10 +121,18 @@ input#search:focus {
     right: 0;
     top: 24px;
     background: white;
+    z-index: 1100;
+}
+
+#search-results div.search-results-content {
+    border: {{ theme.borders }};
 }
 
 #search-results a {
     display: block;
+    padding: 3px;
+    color: {{ theme.search }};
+    background: {{ theme.searchBackground }};
 }
 
 pre {
