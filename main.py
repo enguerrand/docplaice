@@ -168,7 +168,7 @@ def build_search_index(search_type, md_root):
                     matches = []
                     search_index[name] = matches
                 matches.append({
-                    "name": name,
+                    "name": re.sub(REGEX_MD_EXT, "", name),
                     "url": url
                 })
         return search_index
