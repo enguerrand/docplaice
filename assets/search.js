@@ -20,9 +20,9 @@ class SearchResults extends React.Component {
         this.setState((prevState, prevProps) => {
             let nextState = {};
             for (const key in search_index) {
-                if (key.includes(search_string) && !prevState[key]) {
+                if (search_string !== "" && key.includes(search_string) && !prevState[key]) {
                     nextState[key] = true;
-                } else if (!key.includes(search_string) && prevState[key]) {
+                } else if (search_string === "" || !key.includes(search_string) && prevState[key]) {
                     nextState[key] = false;
                 }
             }
