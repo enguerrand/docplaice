@@ -73,8 +73,11 @@ div.sidebar-nav ul li a.current {
     font-weight: bold;
 }
 
-div.top {
+.top-row {
     border-bottom: {{ theme.borders }};
+}
+
+div.top {
     display: flex;
     align-items: center;
     padding-bottom: 15px;
@@ -101,11 +104,16 @@ div.breadcrumbs > a, div.breadcrumbs > a:visited, div.breadcrumbs > a:hover {
   border-radius: 0.2em;
 }
 
+.search-form {
+    position: relative;
+    width: 100%;
+}
+
 input#search {
     width: 100%;
     color: {{ theme.search }};
-    background: {{ theme.searchBackground }};
     border: {{ theme.borders }};
+    background: {{ theme.searchBackground }};
     padding: 3px;
 }
 
@@ -116,7 +124,7 @@ input#search:focus {
 
 #search-results {
     position: absolute;
-    margin: 39px 15px 0 15px;
+    margin: 15px 0 0 0;
     left: 0;
     right: 0;
     top: 24px;
