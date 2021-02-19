@@ -1,6 +1,7 @@
 const e = React.createElement;
 
 const EVENT_TYPES = ["change", "paste", "keyup", "focus"];
+const MAX_RESULT_COUNT = 20;
 
 class SearchResults extends React.Component {
     constructor(props) {
@@ -62,25 +63,29 @@ class SearchResults extends React.Component {
 
     render() {
         let entries = [];
-        for (const key in this.state) {
-            if (this.state[key]) {
-                const matches = search_index[key];
-                for (const resultIndex in matches) {
-                    const match = matches[resultIndex];
-                    entries.push(
-                        e(
-                            "a",
-                            {
-                                key: key + "." + resultIndex,
-                                onMouseDown: () => {this.monitorFocus = false},
-                                href: match["url"]
-                            },
-                            match["name"]
-                        )
-                    );
+        keysLoop:
+            for (const key in this.state) {
+                if (this.state[key]) {
+                    const matches = search_index[key];
+                    for (const resultIndex in matches) {
+                        const match = matches[resultIndex];
+                        entries.push(
+                            e(
+                                "a",
+                                {
+                                    key: key + "." + resultIndex,
+                                    onMouseDown: () => {this.monitorFocus = false},
+                                    href: match["url"]
+                                },
+                                match["name"]
+                            )
+                        );
+                        if (entries.length >= MAX_RESULT_COUNT) {
+                            break keysLoop;
+                        }
+                    }
                 }
             }
-        }
         let searchResultsClass;
         if (entries.length > 0) {
             searchResultsClass = "search-results-content";
