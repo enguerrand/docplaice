@@ -1,6 +1,6 @@
 const e = React.createElement;
 
-const EVENT_TYPES = ["change", "paste", "keyup", "focus"];
+const EVENT_TYPES = ["paste", "keyup", "focus"];
 const MAX_RESULT_COUNT = 20;
 
 class SearchResults extends React.Component {
@@ -8,9 +8,11 @@ class SearchResults extends React.Component {
         super(props);
         this.handleArrowKey = this.handleArrowKey.bind(this);
         this.getMatchCount = this.getMatchCount.bind(this);
+        this.redirectToSelectedHref = this.redirectToSelectedHref.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleEvent = this.handleEvent.bind(this);
         this.handleFocusLoss = this.handleFocusLoss.bind(this);
+        this.removeEventListeners = this.removeEventListeners.bind(this);
         this.state = {
             matches: [],
             selectedIndex: -1
@@ -20,7 +22,6 @@ class SearchResults extends React.Component {
 
     handleArrowKey(event) {
         const element = document.getElementById("search");
-        console.log(event.key);
         const callback = () => {
             // if (this.state.selectedIndex > -1) {
             //     const matchingString = this.state.matches[this.state.selectedIndex];
@@ -60,6 +61,11 @@ class SearchResults extends React.Component {
                 }, callback);
                 break;
             }
+            case "Enter": {
+                // this.removeEventListeners();
+                this.redirectToSelectedHref();
+                break;
+            }
             default:
                 return true;
         }
@@ -73,7 +79,18 @@ class SearchResults extends React.Component {
         return matchCount;
     }
 
-    handleInputChange() {
+    redirectToSelectedHref() {
+        const selection = document.querySelector("#search-results a.selected");
+        if (selection !== null) {
+            const href = selection.href;
+            if (href !== null && window.location.href !== href) {
+                window.location.href = href;
+            }
+        }
+
+    }
+
+    handleInputChange(event) {
         const search_string = document.getElementById("search").value;
         let nextMatches = [];
         for (const key in search_index) {
@@ -90,23 +107,17 @@ class SearchResults extends React.Component {
     }
 
     handleEvent(event) {
-        if (event.key !== undefined && event.key.startsWith("Arrow")) {
+        if (event.key !== undefined && (event.key.startsWith("Arrow") || event.key === "Enter" )) {
             return this.handleArrowKey(event);
         } else {
-            return this.handleInputChange();
+            return this.handleInputChange(event);
         }
     }
 
     handleFocusLoss(){
         if (this.monitorFocus) {
-            this.setState((prevState, prevProps) => {
-                let nextState = {};
-                for (const key in search_index) {
-                    if (prevState[key]) {
-                        nextState[key] = false;
-                    }
-                }
-                return nextState;
+            this.setState({
+                matches: []
             });
         }
     }
@@ -119,12 +130,16 @@ class SearchResults extends React.Component {
         element.addEventListener("blur", this.handleFocusLoss);
     }
 
-    componentWillUnmount() {
+    removeEventListeners() {
         const element = document.getElementById("search");
         for (const t of EVENT_TYPES) {
             element.removeEventListener(t, this.handleEvent);
         }
         element.removeEventListener("blur", this.handleFocusLoss);
+    }
+
+    componentWillUnmount() {
+        this.removeEventListeners();
     }
 
     render() {
