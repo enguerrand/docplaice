@@ -22,13 +22,6 @@ class SearchResults extends React.Component {
 
     handleArrowKey(event) {
         const element = document.getElementById("search");
-        const callback = () => {
-            // if (this.state.selectedIndex > -1) {
-            //     const matchingString = this.state.matches[this.state.selectedIndex];
-            //
-            //     element.select();
-            // }
-        };
         switch(event.key) {
             case "ArrowUp": {
                 this.setState((state, props) => {
@@ -41,7 +34,7 @@ class SearchResults extends React.Component {
                     return {
                         selectedIndex: nextIndex
                     }
-                }, callback);
+                });
                 break;
             }
             case "ArrowDown": {
@@ -58,7 +51,7 @@ class SearchResults extends React.Component {
                     return {
                         selectedIndex: nextIndex
                     }
-                }, callback);
+                });
                 break;
             }
             case "Enter": {
