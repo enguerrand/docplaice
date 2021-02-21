@@ -7,6 +7,7 @@ class SearchResults extends React.Component {
     constructor(props) {
         super(props);
         this.handleArrowKey = this.handleArrowKey.bind(this);
+        this.getMatchCount = this.getMatchCount.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleEvent = this.handleEvent.bind(this);
         this.handleFocusLoss = this.handleFocusLoss.bind(this);
@@ -20,18 +21,56 @@ class SearchResults extends React.Component {
     handleArrowKey(event) {
         const element = document.getElementById("search");
         console.log(event.key);
+        const callback = () => {
+            // if (this.state.selectedIndex > -1) {
+            //     const matchingString = this.state.matches[this.state.selectedIndex];
+            //
+            //     element.select();
+            // }
+        };
         switch(event.key) {
             case "ArrowUp": {
-                element.select();
-                return false;
+                this.setState((state, props) => {
+                    const prevIndex = state.selectedIndex;
+                    const matchCount = this.getMatchCount(state.matches);
+                    let nextIndex = Math.max(-1, prevIndex - 1);
+                    if (matchCount === 0) {
+                        nextIndex = -1;
+                    }
+                    return {
+                        selectedIndex: nextIndex
+                    }
+                }, callback);
+                break;
             }
             case "ArrowDown": {
-                element.select();
-                return false;
+                this.setState((state, props) => {
+                    const prevIndex = state.selectedIndex;
+                    const matchCount = this.getMatchCount(state.matches);
+                    let nextIndex = Math.min(
+                        Math.min(matchCount, MAX_RESULT_COUNT) - 1,
+                        prevIndex + 1
+                    );
+                    if (matchCount === 0) {
+                        nextIndex = -1;
+                    }
+                    return {
+                        selectedIndex: nextIndex
+                    }
+                }, callback);
+                break;
             }
             default:
                 return true;
         }
+    }
+
+    getMatchCount(matches) {
+        let matchCount = 0;
+        for (const m of matches) {
+            matchCount += search_index[m].length;
+        }
+        return matchCount;
     }
 
     handleInputChange() {
@@ -44,7 +83,8 @@ class SearchResults extends React.Component {
             }
         }
         this.setState({
-            matches: nextMatches
+            matches: nextMatches,
+            selectedIndex: -1
         });
         return true;
     }
@@ -89,16 +129,23 @@ class SearchResults extends React.Component {
 
     render() {
         let entries = [];
+        let index = -1;
         keysLoop:
             for (const key of this.state.matches) {
                 if (this.state.matches.includes(key)) {
                     const matches = search_index[key];
                     for (const resultIndex in matches) {
+                        index++;
                         const match = matches[resultIndex];
+                        let className = "";
+                        if (index === this.state.selectedIndex) {
+                            className = "selected";
+                        }
                         entries.push(
                             e(
                                 "a",
                                 {
+                                    className: className,
                                     key: key + "." + resultIndex,
                                     onMouseDown: () => {this.monitorFocus = false},
                                     href: match["url"]

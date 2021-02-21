@@ -143,6 +143,11 @@ input#search:focus {
     background: {{ theme.searchBackground }};
 }
 
+#search-results a.selected {
+    color: {{ theme.navCurrent }};
+    background: {{ theme.navCurrentBackground }};
+}
+
 pre {
   padding: 15px;
 }
