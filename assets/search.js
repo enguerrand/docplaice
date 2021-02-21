@@ -186,4 +186,8 @@ class SearchResults extends React.Component {
 window.onload = function () {
     const domContainer = document.querySelector('#search-results');
     ReactDOM.render(e(SearchResults), domContainer);
+    const searchInput = document.getElementById("search")
+    if (searchInput !== null) {
+        searchInput.select();
+    }
 }
