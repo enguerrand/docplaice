@@ -6,7 +6,9 @@ const MAX_RESULT_COUNT = 20;
 class SearchResults extends React.Component {
     constructor(props) {
         super(props);
-        this.handleChange = this.handleChange.bind(this);
+        this.handleArrowKey = this.handleArrowKey.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleEvent = this.handleEvent.bind(this);
         this.handleFocusLoss = this.handleFocusLoss.bind(this);
         this.state = {};
         this.monitorFocus = true;
@@ -15,7 +17,24 @@ class SearchResults extends React.Component {
         }
     }
 
-    handleChange() {
+    handleArrowKey(event) {
+        const element = document.getElementById("search");
+        console.log(event.key);
+        switch(event.key) {
+            case "ArrowUp": {
+                element.select();
+                return false;
+            }
+            case "ArrowDown": {
+                element.select();
+                return false;
+            }
+            default:
+                return true;
+        }
+    }
+
+    handleInputChange() {
         const search_string = document.getElementById("search").value;
         this.setState((prevState, prevProps) => {
             let nextState = {};
@@ -29,7 +48,15 @@ class SearchResults extends React.Component {
             }
             return nextState;
         });
-        console.log(search_string);
+        return true;
+    }
+
+    handleEvent(event) {
+        if (event.key !== undefined && event.key.startsWith("Arrow")) {
+            return this.handleArrowKey(event);
+        } else {
+            return this.handleInputChange();
+        }
     }
 
     handleFocusLoss(){
@@ -49,7 +76,7 @@ class SearchResults extends React.Component {
     componentDidMount() {
         const element = document.getElementById("search");
         for (const t of EVENT_TYPES) {
-            element.addEventListener(t, this.handleChange);
+            element.addEventListener(t, this.handleEvent);
         }
         element.addEventListener("blur", this.handleFocusLoss);
     }
@@ -57,7 +84,7 @@ class SearchResults extends React.Component {
     componentWillUnmount() {
         const element = document.getElementById("search");
         for (const t of EVENT_TYPES) {
-            element.removeEventListener(t, this.handleChange);
+            element.removeEventListener(t, this.handleEvent);
         }
         element.removeEventListener("blur", this.handleFocusLoss);
     }
