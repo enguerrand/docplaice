@@ -10,11 +10,11 @@ class SearchResults extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleEvent = this.handleEvent.bind(this);
         this.handleFocusLoss = this.handleFocusLoss.bind(this);
-        this.state = {};
+        this.state = {
+            matches: [],
+            selectedIndex: -1
+        };
         this.monitorFocus = true;
-        for (const key in search_index) {
-            this.state[key] = false
-        }
     }
 
     handleArrowKey(event) {
@@ -36,17 +36,15 @@ class SearchResults extends React.Component {
 
     handleInputChange() {
         const search_string = document.getElementById("search").value;
-        this.setState((prevState, prevProps) => {
-            let nextState = {};
-            for (const key in search_index) {
-                let search_matches = key.toLowerCase().includes(search_string.toLowerCase());
-                if (search_string !== "" && search_matches && !prevState[key]) {
-                    nextState[key] = true;
-                } else if (search_string === "" || !search_matches && prevState[key]) {
-                    nextState[key] = false;
-                }
+        let nextMatches = [];
+        for (const key in search_index) {
+            let search_matches = key.toLowerCase().includes(search_string.toLowerCase());
+            if (search_string !== "" && search_matches) {
+                nextMatches.push(key);
             }
-            return nextState;
+        }
+        this.setState({
+            matches: nextMatches
         });
         return true;
     }
@@ -92,8 +90,8 @@ class SearchResults extends React.Component {
     render() {
         let entries = [];
         keysLoop:
-            for (const key in this.state) {
-                if (this.state[key]) {
+            for (const key of this.state.matches) {
+                if (this.state.matches.includes(key)) {
                     const matches = search_index[key];
                     for (const resultIndex in matches) {
                         const match = matches[resultIndex];
