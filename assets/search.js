@@ -12,7 +12,6 @@ class SearchResults extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleEvent = this.handleEvent.bind(this);
         this.handleFocusLoss = this.handleFocusLoss.bind(this);
-        this.removeEventListeners = this.removeEventListeners.bind(this);
         this.state = {
             matches: [],
             selectedIndex: -1
@@ -55,7 +54,6 @@ class SearchResults extends React.Component {
                 break;
             }
             case "Enter": {
-                // this.removeEventListeners();
                 this.redirectToSelectedHref();
                 break;
             }
@@ -76,7 +74,7 @@ class SearchResults extends React.Component {
         const selection = document.querySelector("#search-results a.selected");
         if (selection !== null) {
             const href = selection.href;
-            if (href !== null && window.location.href !== href) {
+            if (href !== null) {
                 window.location.href = href;
             }
         }
@@ -123,16 +121,12 @@ class SearchResults extends React.Component {
         element.addEventListener("blur", this.handleFocusLoss);
     }
 
-    removeEventListeners() {
+    componentWillUnmount() {
         const element = document.getElementById("search");
         for (const t of EVENT_TYPES) {
             element.removeEventListener(t, this.handleEvent);
         }
         element.removeEventListener("blur", this.handleFocusLoss);
-    }
-
-    componentWillUnmount() {
-        this.removeEventListeners();
     }
 
     render() {
