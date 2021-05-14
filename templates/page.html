@@ -24,7 +24,9 @@
 <div class="container-fluid">
     <div class="row top-row">
         <div class="{{ breadcrumb_col_class }} top">
-            <img class="docplaice-icon" alt="docplaice icon" src="/img/docplaice.svg" title="docplaice - a place for flat file documentation">
+            <a href="https://github.com/enguerrand/docplaice">
+                <img class="docplaice-icon" alt="docplaice icon" src="/img/docplaice.svg" title="docplaice - a place for flat file documentation">
+            </a>
             <div class="breadcrumbs">
                 {% for breadcrumb in breadcrumbs %}
                 <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
