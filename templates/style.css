@@ -154,16 +154,12 @@ pre {
 
 p > code {
   padding: 10px;
-  color: {{ theme.code }};
-  background: {{ theme.codeBackground }};
-  font-family: monospace, serif;
-  font-size: 1em;
 }
 
 pre, code {
   color: {{ theme.code }};
   background: {{ theme.codeBackground }};
-  font-family: monospace, sans-serif;
+  font-family: Monaco,Courier New,monospace,serif;
   font-size: 1em;
 }
 
