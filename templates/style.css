@@ -163,7 +163,7 @@ p > code {
 pre, code {
   color: {{ theme.code }};
   background: {{ theme.codeBackground }};
-  font-family: monospace, serif;
+  font-family: monospace, sans-serif;
   font-size: 1em;
 }
 
