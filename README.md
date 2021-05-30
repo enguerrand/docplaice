@@ -4,6 +4,8 @@ A Place for flat File Documentation
 ## Description
 Docplaice is a webservice written in python that dynamically renders markdown files as html. 
 
+If you want to take a look at Docplaice in action feel free to visit [my own installation](https://wiki.rochefort.de). 
+
 It is based on the [Flask](https://palletsprojects.com/p/flask/) web framework.
 
 ## License
