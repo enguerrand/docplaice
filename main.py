@@ -1,5 +1,6 @@
 import os
 import re
+import sys, traceback
 
 import markdown
 from flask import Flask, Response, render_template, abort, send_from_directory
@@ -24,8 +25,8 @@ class Page:
 def render_page(path, md_root):
     try:
         return render_page_unsafe(path, md_root)
-    except Exception as e:
-        print(e)
+    except:
+        traceback.print_exception(*sys.exc_info())
         return None
 
 
@@ -144,9 +145,10 @@ def render_dir(directory, current_path, section_title):
 
 def render_file(md_file):
     try:
-        with open(md_file, "r") as file:
+        with open(md_file, "r", encoding="UTF-8") as file:
             md = file.read()
     except:
+        traceback.print_exception(*sys.exc_info())
         return None
     return markdown.markdown(md, extensions=["extra"])
 
@@ -217,6 +219,7 @@ def serve_assets(path):
 @app.route("/<path:path>")
 def catch_all(path):
     if contains_forbidden_chars(path):
+        print(f"Sending 404 because of forbidden chars in {path}")
         abort(404)
 
     md_root = config.markdown_root
@@ -224,6 +227,7 @@ def catch_all(path):
         md_root = md_root + "/"
     rendered_page = render_page(path, md_root)
     if rendered_page is None:
+        print(f"Sending 404 because of requested path was not found")
         abort(404)
     else:
         return rendered_page
